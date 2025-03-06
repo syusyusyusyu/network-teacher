@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .gradient-border {
+    @apply border-2 border-transparent bg-clip-padding;
+    background-image: linear-gradient(white, white), 
+                      linear-gradient(to right, #6366f1, #ec4899);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .text-shadow-pop {
+    text-shadow: 0 2px 0 #6366f1;
+  }
+}
