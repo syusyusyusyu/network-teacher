@@ -3,7 +3,7 @@ import {
   CheckCircle, AlertTriangle, XCircle, HelpCircle, 
   Loader, Sparkles, Wifi, Zap, Globe, Server,
   ArrowRight, Star, Heart} from 'lucide-react';
-import NetworkDiagnosticsDashboard from './components/NetworkDiagnosticsDashboard';
+import NetworkDiagnosticsDashboard from './components/EnhancedNetworkDiagnosticsDashboard';
 
 // スーパーポップネットワーク先生コンポーネント
 const SuperPopNetworkTeacher = () => {
