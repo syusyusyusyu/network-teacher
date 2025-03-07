@@ -3,7 +3,9 @@ import {
   CheckCircle, AlertTriangle, XCircle, HelpCircle, 
   Loader, Sparkles, Wifi, Zap, Globe, Server,
   ArrowRight, Star, Heart} from 'lucide-react';
+import NetworkDiagnosticsDashboard from './components/NetworkDiagnosticsDashboard';
 
+// スーパーポップネットワーク先生コンポーネント
 const SuperPopNetworkTeacher = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [selectedScenario, setSelectedScenario] = useState('normal');
@@ -524,6 +526,15 @@ const SuperPopNetworkTeacher = () => {
             <Server className="mr-2 h-5 w-5" />
             結果
           </button>
+          <button 
+            className={`flex items-center px-4 py-3 font-bold focus:outline-none ${activeTab === 'advanced' 
+              ? 'bg-gradient-to-r from-gray-100 to-slate-100 text-slate-600' 
+              : 'text-slate-600 hover:bg-slate-50'}`}
+            onClick={() => setActiveTab('advanced')}
+          >
+            <Server className="mr-2 h-5 w-5" />
+            詳細診断
+          </button>
         </div>
         
         {/* コンテンツ */}
@@ -781,21 +792,23 @@ const SuperPopNetworkTeacher = () => {
                         </div>
                         <div className="p-2">
                           <table className="w-full">
-                            <tr className="border-b border-purple-100">
-                              <td className="p-2 text-sm font-medium text-gray-700">google.com</td>
-                              <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
-                              <td className="p-2 font-mono text-sm text-gray-700">172.217.175.110</td>
-                            </tr>
-                            <tr className="border-b border-purple-100">
-                              <td className="p-2 text-sm font-medium text-gray-700">facebook.com</td>
-                              <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
-                              <td className="p-2 font-mono text-sm text-gray-700">31.13.72.36</td>
-                            </tr>
-                            <tr>
-                              <td className="p-2 text-sm font-medium text-gray-700">youtube.com</td>
-                              <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
-                              <td className="p-2 font-mono text-sm text-gray-700">142.250.185.78</td>
-                            </tr>
+                            <tbody>
+                              <tr className="border-b border-purple-100">
+                                <td className="p-2 text-sm font-medium text-gray-700">google.com</td>
+                                <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
+                                <td className="p-2 font-mono text-sm text-gray-700">172.217.175.110</td>
+                              </tr>
+                              <tr className="border-b border-purple-100">
+                                <td className="p-2 text-sm font-medium text-gray-700">facebook.com</td>
+                                <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
+                                <td className="p-2 font-mono text-sm text-gray-700">31.13.72.36</td>
+                              </tr>
+                              <tr>
+                                <td className="p-2 text-sm font-medium text-gray-700">youtube.com</td>
+                                <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
+                                <td className="p-2 font-mono text-sm text-gray-700">142.250.185.78</td>
+                              </tr>
+                            </tbody>
                           </table>
                         </div>
                       </div>
@@ -962,6 +975,55 @@ const SuperPopNetworkTeacher = () => {
               </div>
             </div>
           )}
+
+          {/* 詳細診断画面 - Cisco 892ルーター診断 */}
+          {activeTab === 'advanced' && (
+            <div className="animate-fadeIn">
+              <div className="mb-4 overflow-hidden rounded-2xl border-2 border-slate-300 bg-white">
+                <div className="bg-gradient-to-r from-slate-600 to-slate-800 p-4 text-white">
+                  <h2 className="flex items-center text-xl font-bold">
+                    <Server className="mr-2 h-6 w-6" />
+                    Cisco 892ルーター詳細診断
+                  </h2>
+                </div>
+                <div className="p-4">
+                  <div className="mb-4 rounded-xl bg-slate-50 p-3 shadow-sm">
+                    <p className="mb-2 text-base font-medium text-slate-700">
+                      <span className="text-lg">🖥️</span> ネットワーク機器の詳細な診断を実行できます
+                    </p>
+                    <div className="flex rounded-lg bg-slate-100 p-2">
+                      <div className="text-xl">⚠️</div>
+                      <p className="ml-2 text-sm text-slate-700">
+                        この機能はCisco 892ルーターを使用したネットワーク環境向けに最適化されています
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <button 
+                    className="w-full rounded-lg bg-slate-700 py-3 text-center font-bold text-white shadow hover:bg-slate-800"
+                    onClick={() => setActiveTab('cisco-diagnostics')}
+                  >
+                    詳細診断ツールを起動
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Cisco 892ルーター診断ダッシュボード */}
+          {activeTab === 'cisco-diagnostics' && (
+            <div className="animate-fadeIn">
+              <NetworkDiagnosticsDashboard />
+              <div className="mt-4 text-center">
+                <button 
+                  className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
+                  onClick={() => setActiveTab('advanced')}
+                >
+                  ← 戻る
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="mt-4 text-center text-xs font-medium text-purple-400">
@@ -993,4 +1055,11 @@ const SuperPopNetworkTeacher = () => {
   );
 };
 
-export default SuperPopNetworkTeacher;
+// メインアプリケーションコンポーネント
+const App = () => {
+  return (
+    <SuperPopNetworkTeacher />
+  );
+};
+
+export default App;
