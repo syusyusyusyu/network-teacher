@@ -2,7 +2,7 @@
 // 実際の環境ではここからバックエンドAPIを呼び出す
 
 // FastAPIバックエンドのURLを設定
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 // 接続種別の定義
 export type ConnectionType = 'ssh' | 'snmp' | 'telnet';

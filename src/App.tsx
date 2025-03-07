@@ -1,15 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   CheckCircle, AlertTriangle, XCircle, HelpCircle, 
   Loader, Sparkles, Wifi, Zap, Globe, Server,
-  ArrowRight, Star, Heart} from 'lucide-react';
-import NetworkDiagnosticsDashboard from './components/EnhancedNetworkDiagnosticsDashboard';
+  ArrowRight, Star, Heart } from 'lucide-react';
+import EnhancedNetworkDiagnosticsDashboard from './components/EnhancedNetworkDiagnosticsDashboard';
 
-// スーパーポップネットワーク先生コンポーネント
-const SuperPopNetworkTeacher = () => {
-  const [activeTab, setActiveTab] = useState('home');
-  const [selectedScenario, setSelectedScenario] = useState('normal');
-  const [diagnosisResult, setDiagnosisResult] = useState<string | null>(null);
+// タイプ定義
+type ScenarioKey = 'normal' | 'no-gateway' | 'dns-problem' | 'slow';
+type DiagnosisResult = ScenarioKey | null;
+type ActiveTab = 'home' | 'learn' | 'results' | 'advanced' | 'cisco-diagnostics';
+
+interface ScenarioDetails {
+  status: 'success' | 'warning' | 'error' | 'unknown';
+  icon: string;
+  title: string;
+  message: string;
+}
+
+interface ScenarioSolution {
+  title: string;
+  steps: string[];
+  command?: string;
+  explanation: string;
+}
+
+interface Scenario {
+  character: string;
+  emoji: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  primaryColor: string;
+  bgGradient: string;
+  borderColor: string;
+  textColor: string;
+  details: {
+    ping: ScenarioDetails;
+    routing: ScenarioDetails;
+    dns: ScenarioDetails;
+    stability: ScenarioDetails;
+  };
+  solution: ScenarioSolution;
+}
+
+/**
+ * スーパーポップネットワーク先生コンポーネント
+ * ネットワークの問題を診断・説明するメインコンポーネント
+ */
+const SuperPopNetworkTeacher: React.FC = () => {
+  // 状態管理
+  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
+  const [selectedScenario, setSelectedScenario] = useState<ScenarioKey>('normal');
+  const [diagnosisResult, setDiagnosisResult] = useState<DiagnosisResult>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showExplanation, setShowExplanation] = useState<string | null>(null);
   const [bounce, setBounce] = useState('');
@@ -18,19 +60,19 @@ const SuperPopNetworkTeacher = () => {
   const [sparkle, setSparkle] = useState(false);
 
   // バウンスアニメーションを適用する関数
-  const doBounce = () => {
+  const doBounce = useCallback(() => {
     setBounce('animate-bounce');
     setTimeout(() => setBounce(''), 1000);
-  };
+  }, []);
 
   // スパークルエフェクトを適用する関数
-  const doSparkle = () => {
+  const doSparkle = useCallback(() => {
     setSparkle(true);
     setTimeout(() => setSparkle(false), 1500);
-  };
+  }, []);
 
   // 診断を開始する処理
-  const startDiagnosis = () => {
+  const startDiagnosis = useCallback(() => {
     setIsLoading(true);
     doSparkle();
     
@@ -41,50 +83,17 @@ const SuperPopNetworkTeacher = () => {
       setActiveTab('results');
       doBounce();
     }, 2000);
-  };
+  }, [selectedScenario, doSparkle, doBounce]);
 
   // 診断をリセットする処理
-  const resetDiagnosis = () => {
+  const resetDiagnosis = useCallback(() => {
     setDiagnosisResult(null);
     setActiveTab('home');
     doSparkle();
-  };
+  }, [doSparkle]);
 
   // 診断シナリオのデータ
-  interface ScenarioDetails {
-    status: 'success' | 'warning' | 'error' | 'unknown';
-    icon: string;
-    title: string;
-    message: string;
-  }
-
-  interface ScenarioSolution {
-    title: string;
-    steps: string[];
-    command?: string;
-    explanation: string;
-  }
-
-  interface Scenario {
-    character: string;
-    emoji: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    primaryColor: string;
-    bgGradient: string;
-    borderColor: string;
-    textColor: string;
-    details: {
-      ping: ScenarioDetails;
-      routing: ScenarioDetails;
-      dns: ScenarioDetails;
-      stability: ScenarioDetails;
-    };
-    solution: ScenarioSolution;
-  }
-
-  const scenarios: { [key: string]: Scenario } = {
+  const scenarios: Record<ScenarioKey, Scenario> = {
     normal: {
       character: '🌈',
       emoji: '🎉',
@@ -379,6 +388,7 @@ const SuperPopNetworkTeacher = () => {
           
           <button 
             className={`mt-2 w-full rounded-lg bg-gradient-to-r ${primaryColor} py-2 text-center text-sm font-bold text-white transition hover:opacity-90`}
+            aria-expanded={isExpanded}
           >
             {isExpanded ? '閉じる' : 'もっと詳しく！'}
           </button>
@@ -503,6 +513,8 @@ const SuperPopNetworkTeacher = () => {
               ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600' 
               : 'text-purple-600 hover:bg-purple-50'}`}
             onClick={() => setActiveTab('home')}
+            aria-selected={activeTab === 'home'}
+            role="tab"
           >
             <Zap className="mr-2 h-5 w-5" />
             診断する
@@ -512,6 +524,8 @@ const SuperPopNetworkTeacher = () => {
               ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-600' 
               : 'text-blue-600 hover:bg-blue-50'}`}
             onClick={() => setActiveTab('learn')}
+            aria-selected={activeTab === 'learn'}
+            role="tab"
           >
             <Globe className="mr-2 h-5 w-5" />
             学ぶ
@@ -522,6 +536,9 @@ const SuperPopNetworkTeacher = () => {
               : 'text-emerald-600 hover:bg-emerald-50'}`}
             onClick={() => diagnosisResult && setActiveTab('results')}
             disabled={!diagnosisResult}
+            aria-selected={activeTab === 'results'}
+            aria-disabled={!diagnosisResult}
+            role="tab"
           >
             <Server className="mr-2 h-5 w-5" />
             結果
@@ -531,6 +548,8 @@ const SuperPopNetworkTeacher = () => {
               ? 'bg-gradient-to-r from-gray-100 to-slate-100 text-slate-600' 
               : 'text-slate-600 hover:bg-slate-50'}`}
             onClick={() => setActiveTab('advanced')}
+            aria-selected={activeTab === 'advanced'}
+            role="tab"
           >
             <Server className="mr-2 h-5 w-5" />
             詳細診断
@@ -573,14 +592,19 @@ const SuperPopNetworkTeacher = () => {
                   </div>
                   
                   <div className="mb-4">
-                    <label className="mb-2 block text-base font-bold text-indigo-700">
+                    <label 
+                      className="mb-2 block text-base font-bold text-indigo-700"
+                      htmlFor="scenario-select"
+                    >
                       どんなトラブルを診断する？ （デモ用シナリオ選択）
                     </label>
                     <div className="relative">
                       <select 
+                        id="scenario-select"
                         className="w-full appearance-none rounded-xl border-2 border-indigo-300 bg-white p-3 pr-10 font-medium text-indigo-700 shadow-sm focus:border-indigo-500 focus:outline-none"
                         value={selectedScenario}
-                        onChange={(e) => setSelectedScenario(e.target.value)}
+                        onChange={(e) => setSelectedScenario(e.target.value as ScenarioKey)}
+                        aria-label="診断シナリオ"
                       >
                         <option value="normal">普通にネットが使える状態</option>
                         <option value="no-gateway">ネットに全然つながらない</option>
@@ -597,6 +621,7 @@ const SuperPopNetworkTeacher = () => {
                     className={`group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-0.5 text-center font-extrabold text-white shadow-md transition-all duration-300 hover:shadow-lg ${isLoading ? 'opacity-80' : ''}`}
                     onClick={startDiagnosis}
                     disabled={isLoading}
+                    aria-label="診断を開始"
                   >
                     <span className="relative block rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-4 text-lg md:text-xl">
                       {isLoading ? (
@@ -953,6 +978,7 @@ const SuperPopNetworkTeacher = () => {
                 <button 
                   className="group relative overflow-hidden rounded-xl border-2 border-indigo-200 bg-white p-0.5 text-center font-bold text-indigo-500 transition-all duration-300 hover:border-indigo-300 hover:shadow-md md:flex-1"
                   onClick={resetDiagnosis}
+                  aria-label="もう一度診断する"
                 >
                   <span className="block rounded-lg px-6 py-3 text-lg">
                     <span className="flex items-center justify-center">
@@ -964,6 +990,7 @@ const SuperPopNetworkTeacher = () => {
                 <button 
                   className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 p-0.5 text-center font-extrabold text-white shadow-md transition-all duration-300 hover:shadow-lg md:flex-1"
                   onClick={() => setActiveTab('learn')}
+                  aria-label="もっと詳しく学ぶ"
                 >
                   <span className="relative block rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 px-6 py-3 text-lg">
                     <span className="flex items-center justify-center">
@@ -1002,6 +1029,7 @@ const SuperPopNetworkTeacher = () => {
                   <button 
                     className="w-full rounded-lg bg-slate-700 py-3 text-center font-bold text-white shadow hover:bg-slate-800"
                     onClick={() => setActiveTab('cisco-diagnostics')}
+                    aria-label="詳細診断ツールを起動"
                   >
                     詳細診断ツールを起動
                   </button>
@@ -1013,11 +1041,12 @@ const SuperPopNetworkTeacher = () => {
           {/* Cisco 892ルーター診断ダッシュボード */}
           {activeTab === 'cisco-diagnostics' && (
             <div className="animate-fadeIn">
-              <NetworkDiagnosticsDashboard />
+              <EnhancedNetworkDiagnosticsDashboard />
               <div className="mt-4 text-center">
                 <button 
                   className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
                   onClick={() => setActiveTab('advanced')}
+                  aria-label="詳細診断画面に戻る"
                 >
                   ← 戻る
                 </button>
@@ -1055,8 +1084,11 @@ const SuperPopNetworkTeacher = () => {
   );
 };
 
-// メインアプリケーションコンポーネント
-const App = () => {
+/**
+ * メインアプリケーションコンポーネント
+ * ネットワーク先生を起動する
+ */
+const App: React.FC = () => {
   return (
     <SuperPopNetworkTeacher />
   );
