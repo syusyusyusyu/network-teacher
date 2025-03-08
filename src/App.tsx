@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { 
   CheckCircle, AlertTriangle, XCircle, HelpCircle, 
   Loader, Sparkles, Wifi, Zap, Globe, Server,
-  ArrowRight, Star, Heart } from 'lucide-react';
+  ArrowRight, Star, Heart, Menu, X } from 'lucide-react';
 import EnhancedNetworkDiagnosticsDashboard from './components/EnhancedNetworkDiagnosticsDashboard';
 
 // タイプ定義
@@ -55,6 +55,7 @@ const SuperPopNetworkTeacher: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showExplanation, setShowExplanation] = useState<string | null>(null);
   const [bounce, setBounce] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // アニメーション用のstate
   const [sparkle, setSparkle] = useState(false);
@@ -91,6 +92,11 @@ const SuperPopNetworkTeacher: React.FC = () => {
     setActiveTab('home');
     doSparkle();
   }, [doSparkle]);
+
+  // モバイルメニューの切り替え
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen(prev => !prev);
+  }, []);
 
   // 診断シナリオのデータ
   const scenarios: Record<ScenarioKey, Scenario> = {
@@ -339,15 +345,15 @@ const SuperPopNetworkTeacher: React.FC = () => {
     };
 
     return (
-      <div className={`p-4 rounded-xl border-2 bg-gradient-to-br ${styles.bgGradient} ${styles.borderColor} transform transition-all duration-200 hover:scale-102 hover:shadow-md`}>
+      <div className={`p-3 sm:p-4 rounded-xl border-2 bg-gradient-to-br ${styles.bgGradient} ${styles.borderColor} transform transition-all duration-200 hover:scale-102 hover:shadow-md`}>
         <div className="flex items-center mb-2">
-          <div className="mr-3 text-2xl">{icon}</div>
-          <h4 className="font-bold text-lg">{title}</h4>
+          <div className="mr-2 sm:mr-3 text-xl sm:text-2xl">{icon}</div>
+          <h4 className="font-bold text-sm sm:text-lg">{title}</h4>
           <div className={`ml-auto ${styles.iconBg} p-1 rounded-full`}>
             {getIcon(status)}
           </div>
         </div>
-        <div className={`text-sm ${styles.textColor} font-medium`}>
+        <div className={`text-xs sm:text-sm ${styles.textColor} font-medium`}>
           {message}
         </div>
       </div>
@@ -374,43 +380,43 @@ const SuperPopNetworkTeacher: React.FC = () => {
       >
         <div className={`rounded-lg bg-gradient-to-r ${primaryColor} p-3 text-white`}>
           <div className="flex items-center">
-            <div className="mr-3 text-xl">{emoji}</div>
-            <h3 className="font-bold text-lg">{title}</h3>
+            <div className="mr-2 sm:mr-3 text-lg sm:text-xl">{emoji}</div>
+            <h3 className="font-bold text-sm sm:text-lg">{title}</h3>
           </div>
         </div>
-        <div className="p-3">
+        <div className="p-2 sm:p-3">
           <div className="flex items-start">
-            <div className="mr-3 text-3xl">{icon}</div>
-            <p className="text-sm font-medium text-gray-700">
+            <div className="mr-2 sm:mr-3 text-2xl sm:text-3xl">{icon}</div>
+            <p className="text-xs sm:text-sm font-medium text-gray-700">
               {description}
             </p>
           </div>
           
           <button 
-            className={`mt-2 w-full rounded-lg bg-gradient-to-r ${primaryColor} py-2 text-center text-sm font-bold text-white transition hover:opacity-90`}
+            className={`mt-2 w-full rounded-lg bg-gradient-to-r ${primaryColor} py-2 text-center text-xs sm:text-sm font-bold text-white transition hover:opacity-90`}
             aria-expanded={isExpanded}
           >
             {isExpanded ? '閉じる' : 'もっと詳しく！'}
           </button>
           
           {isExpanded && (
-            <div className="mt-3 animate-fadeIn rounded-lg bg-white p-3 text-sm">
+            <div className="mt-3 animate-fadeIn rounded-lg bg-white p-3 text-xs sm:text-sm">
               {id === 'ping' && (
                 <div>
                   <p className="mb-2 font-bold">Pingの仕組み：</p>
-                  <div className="mb-3 flex items-center space-x-4 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 p-3">
-                    <div className="text-3xl">🧒</div>
-                    <div className="flex-1">「ねえ、聞こえる〜？」</div>
-                    <div className="text-purple-500"><ArrowRight /></div>
-                    <div className="text-3xl">🖥️</div>
+                  <div className="mb-3 flex items-center space-x-2 sm:space-x-4 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 p-2 sm:p-3">
+                    <div className="text-2xl sm:text-3xl">🧒</div>
+                    <div className="flex-1 text-xs sm:text-sm">「ねえ、聞こえる〜？」</div>
+                    <div className="text-purple-500"><ArrowRight size={16} /></div>
+                    <div className="text-2xl sm:text-3xl">🖥️</div>
                   </div>
-                  <div className="flex items-center space-x-4 rounded-lg bg-gradient-to-r from-purple-50 to-blue-50 p-3">
-                    <div className="text-3xl">🖥️</div>
-                    <div className="flex-1">「うん、聞こえるよ！」</div>
-                    <div className="text-purple-500"><ArrowRight /></div>
-                    <div className="text-3xl">🧒</div>
+                  <div className="flex items-center space-x-2 sm:space-x-4 rounded-lg bg-gradient-to-r from-purple-50 to-blue-50 p-2 sm:p-3">
+                    <div className="text-2xl sm:text-3xl">🖥️</div>
+                    <div className="flex-1 text-xs sm:text-sm">「うん、聞こえるよ！」</div>
+                    <div className="text-purple-500"><ArrowRight size={16} /></div>
+                    <div className="text-2xl sm:text-3xl">🧒</div>
                   </div>
-                  <p className="mt-3">
+                  <p className="mt-3 text-xs sm:text-sm">
                     これがPingだよ！声が返ってこなかったら、そのサイトに問題があるかも！
                   </p>
                 </div>
@@ -419,31 +425,31 @@ const SuperPopNetworkTeacher: React.FC = () => {
               {id === 'route' && (
                 <div>
                   <p className="mb-2 font-bold">ルーティングの仕組み：</p>
-                  <div className="mb-2 rounded-lg bg-green-50 p-3">
+                  <div className="mb-2 rounded-lg bg-green-50 p-2 sm:p-3">
                     <div className="flex items-center space-x-2">
-                      <div className="text-xl">🏠</div>
+                      <div className="text-lg sm:text-xl">🏠</div>
                       <div className="flex-1 text-xs font-medium">あなたのパソコン</div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center py-2">
-                    <ArrowRight className="text-green-500" />
+                  <div className="flex items-center justify-center py-1 sm:py-2">
+                    <ArrowRight className="text-green-500" size={16} />
                   </div>
-                  <div className="mb-2 rounded-lg bg-yellow-50 p-3">
+                  <div className="mb-2 rounded-lg bg-yellow-50 p-2 sm:p-3">
                     <div className="flex items-center space-x-2">
-                      <div className="text-xl">🚪</div>
+                      <div className="text-lg sm:text-xl">🚪</div>
                       <div className="flex-1 text-xs font-medium">ゲートウェイ (出入口)</div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center py-2">
-                    <ArrowRight className="text-green-500" />
+                  <div className="flex items-center justify-center py-1 sm:py-2">
+                    <ArrowRight className="text-green-500" size={16} />
                   </div>
-                  <div className="rounded-lg bg-blue-50 p-3">
+                  <div className="rounded-lg bg-blue-50 p-2 sm:p-3">
                     <div className="flex items-center space-x-2">
-                      <div className="text-xl">🌍</div>
+                      <div className="text-lg sm:text-xl">🌍</div>
                       <div className="flex-1 text-xs font-medium">インターネット</div>
                     </div>
                   </div>
-                  <p className="mt-3">
+                  <p className="mt-3 text-xs sm:text-sm">
                     ルーティングは道案内みたいなもの！出口がないと外に出られないよ！
                   </p>
                 </div>
@@ -453,28 +459,28 @@ const SuperPopNetworkTeacher: React.FC = () => {
                 <div>
                   <p className="mb-2 font-bold">DNSの仕組み：</p>
                   <div className="overflow-hidden rounded-lg border-2 border-purple-200">
-                    <div className="bg-purple-100 p-2 text-center font-bold text-purple-700">
+                    <div className="bg-purple-100 p-2 text-center font-bold text-xs sm:text-sm text-purple-700">
                       インターネットの電話帳
                     </div>
-                    <div className="p-3">
-                      <div className="mb-2 flex items-center justify-between rounded bg-white p-2 text-sm">
+                    <div className="p-2 sm:p-3">
+                      <div className="mb-2 flex items-center justify-between rounded bg-white p-1 sm:p-2 text-xs">
                         <div>Google.com</div>
-                        <div><ArrowRight className="text-purple-500" /></div>
+                        <div><ArrowRight className="text-purple-500" size={12} /></div>
                         <div className="font-mono">142.250.185.78</div>
                       </div>
-                      <div className="mb-2 flex items-center justify-between rounded bg-white p-2 text-sm">
+                      <div className="mb-2 flex items-center justify-between rounded bg-white p-1 sm:p-2 text-xs">
                         <div>Yahoo.co.jp</div>
-                        <div><ArrowRight className="text-purple-500" /></div>
+                        <div><ArrowRight className="text-purple-500" size={12} /></div>
                         <div className="font-mono">183.79.135.206</div>
                       </div>
-                      <div className="flex items-center justify-between rounded bg-white p-2 text-sm">
+                      <div className="flex items-center justify-between rounded bg-white p-1 sm:p-2 text-xs">
                         <div>Facebook.com</div>
-                        <div><ArrowRight className="text-purple-500" /></div>
+                        <div><ArrowRight className="text-purple-500" size={12} /></div>
                         <div className="font-mono">31.13.72.36</div>
                       </div>
                     </div>
                   </div>
-                  <p className="mt-3">
+                  <p className="mt-3 text-xs sm:text-sm">
                     DNSは名前と住所を変換するサービス！これがないとサイト名でアクセスできないよ！
                   </p>
                 </div>
@@ -487,27 +493,104 @@ const SuperPopNetworkTeacher: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-pink-50 to-sky-50 p-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-pink-50 to-sky-50 p-2 sm:p-4 py-4 sm:py-8">
       <div className="mx-auto max-w-4xl">
         {/* ヘッダー */}
-        <div className="overflow-hidden rounded-t-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 p-6 text-white shadow-lg relative">
+        <div className="overflow-hidden rounded-t-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 p-4 sm:p-6 text-white shadow-lg relative">
           {sparkle && (
             <Sparkles 
               className="absolute top-2 right-2 animate-spin text-yellow-300" 
-              size={28} 
+              size={24} 
             />
           )}
           <div className="flex items-center">
-            <div className={`mr-4 text-4xl ${bounce}`}>👩‍💻</div>
+            <div className={`mr-3 sm:mr-4 text-3xl sm:text-4xl ${bounce}`}>👩‍💻</div>
             <div>
-              <h1 className="mb-1 text-3xl font-extrabold">ネットワーク先生</h1>
-              <p className="text-lg font-medium text-indigo-100">ネットのトラブルをポップに解決！</p>
+              <h1 className="mb-0 sm:mb-1 text-xl sm:text-3xl font-extrabold">ネットワーク先生</h1>
+              <p className="text-sm sm:text-lg font-medium text-indigo-100">ネットのトラブルをポップに解決！</p>
             </div>
           </div>
         </div>
         
-        {/* タブ */}
-        <div className="flex border-b-2 border-purple-200 bg-white">
+        {/* タブ - モバイル用ハンバーガーメニュー */}
+        <div className="flex md:hidden justify-between items-center border-b-2 border-purple-200 bg-white">
+          <button 
+            className={`flex items-center px-4 py-3 font-bold focus:outline-none ${activeTab === 'home' 
+              ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600' 
+              : 'text-purple-600 hover:bg-purple-50'}`}
+            onClick={() => setActiveTab('home')}
+            aria-selected={activeTab === 'home'}
+            role="tab"
+          >
+            <Zap className="mr-2 h-5 w-5" />
+            診断
+          </button>
+          
+          <button
+            className="p-4 text-purple-600"
+            onClick={toggleMobileMenu}
+            aria-label="メニュー"
+          >
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
+        
+        {/* モバイルメニュー */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-b-2 border-purple-200 shadow-md">
+            <button 
+              className={`flex items-center w-full px-4 py-3 font-bold focus:outline-none ${activeTab === 'learn' 
+                ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-600' 
+                : 'text-blue-600 hover:bg-blue-50'}`}
+              onClick={() => {
+                setActiveTab('learn');
+                setMobileMenuOpen(false);
+              }}
+              aria-selected={activeTab === 'learn'}
+              role="tab"
+            >
+              <Globe className="mr-2 h-5 w-5" />
+              学ぶ
+            </button>
+            
+            <button 
+              className={`flex items-center w-full px-4 py-3 font-bold focus:outline-none ${activeTab === 'results' 
+                ? 'bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-600' 
+                : 'text-emerald-600 hover:bg-emerald-50'}`}
+              onClick={() => {
+                if (diagnosisResult) {
+                  setActiveTab('results');
+                  setMobileMenuOpen(false);
+                }
+              }}
+              disabled={!diagnosisResult}
+              aria-selected={activeTab === 'results'}
+              aria-disabled={!diagnosisResult}
+              role="tab"
+            >
+              <Server className="mr-2 h-5 w-5" />
+              結果
+            </button>
+            
+            <button 
+              className={`flex items-center w-full px-4 py-3 font-bold focus:outline-none ${activeTab === 'advanced' 
+                ? 'bg-gradient-to-r from-gray-100 to-slate-100 text-slate-600' 
+                : 'text-slate-600 hover:bg-slate-50'}`}
+              onClick={() => {
+                setActiveTab('advanced');
+                setMobileMenuOpen(false);
+              }}
+              aria-selected={activeTab === 'advanced'}
+              role="tab"
+            >
+              <Server className="mr-2 h-5 w-5" />
+              詳細診断
+            </button>
+          </div>
+        )}
+        
+        {/* デスクトップ用タブ */}
+        <div className="hidden md:flex border-b-2 border-purple-200 bg-white">
           <button 
             className={`flex items-center px-4 py-3 font-bold focus:outline-none ${activeTab === 'home' 
               ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600' 
@@ -557,13 +640,13 @@ const SuperPopNetworkTeacher: React.FC = () => {
         </div>
         
         {/* コンテンツ */}
-        <div className="relative rounded-b-2xl bg-white p-6 shadow-lg">
+        <div className="relative rounded-b-2xl bg-white p-4 sm:p-6 shadow-lg">
           {/* スパークルエフェクト */}
           {sparkle && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="absolute h-full w-full rounded-b-2xl bg-white opacity-80"></div>
               <div className="z-10 animate-pulse">
-                <Sparkles className="h-16 w-16 animate-bounce text-yellow-400" />
+                <Sparkles className="h-12 w-12 sm:h-16 sm:w-16 animate-bounce text-yellow-400" />
               </div>
             </div>
           )}
@@ -571,29 +654,29 @@ const SuperPopNetworkTeacher: React.FC = () => {
           {/* 診断する画面 */}
           {activeTab === 'home' && (
             <div className="animate-fadeIn">
-              <div className="mb-6 overflow-hidden rounded-2xl border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-indigo-50 shadow-inner">
-                <div className="bg-gradient-to-r from-purple-500 to-indigo-500 p-4 text-white">
-                  <h2 className="flex items-center text-xl font-bold">
-                    <Wifi className="mr-2 h-6 w-6" />
+              <div className="mb-4 sm:mb-6 overflow-hidden rounded-xl sm:rounded-2xl border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-indigo-50 shadow-inner">
+                <div className="bg-gradient-to-r from-purple-500 to-indigo-500 p-3 sm:p-4 text-white">
+                  <h2 className="flex items-center text-base sm:text-xl font-bold">
+                    <Wifi className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                     インターネットがつながらない？
                   </h2>
                 </div>
-                <div className="p-4">
-                  <div className="mb-4 rounded-xl bg-white p-3 shadow-sm">
-                    <p className="mb-2 text-base font-medium text-indigo-700">
-                      <span className="text-lg">👾</span> ネットワーク先生がお悩み解決！難しい用語は使わずに原因を探るよ！
+                <div className="p-3 sm:p-4">
+                  <div className="mb-3 sm:mb-4 rounded-xl bg-white p-2 sm:p-3 shadow-sm">
+                    <p className="mb-1 sm:mb-2 text-sm sm:text-base font-medium text-indigo-700">
+                      <span className="text-base sm:text-lg">👾</span> ネットワーク先生がお悩み解決！難しい用語は使わずに原因を探るよ！
                     </p>
                     <div className="flex rounded-lg bg-indigo-50 p-2">
-                      <div className="text-xl">💡</div>
-                      <p className="ml-2 text-sm text-indigo-700">
+                      <div className="text-lg sm:text-xl">💡</div>
+                      <p className="ml-2 text-xs sm:text-sm text-indigo-700">
                         ボタンひとつでネットの問題を見つけて、わかりやすく説明するよ！
                       </p>
                     </div>
                   </div>
                   
-                  <div className="mb-4">
+                  <div className="mb-3 sm:mb-4">
                     <label 
-                      className="mb-2 block text-base font-bold text-indigo-700"
+                      className="mb-1 sm:mb-2 block text-sm sm:text-base font-bold text-indigo-700"
                       htmlFor="scenario-select"
                     >
                       どんなトラブルを診断する？ （デモ用シナリオ選択）
@@ -601,7 +684,7 @@ const SuperPopNetworkTeacher: React.FC = () => {
                     <div className="relative">
                       <select 
                         id="scenario-select"
-                        className="w-full appearance-none rounded-xl border-2 border-indigo-300 bg-white p-3 pr-10 font-medium text-indigo-700 shadow-sm focus:border-indigo-500 focus:outline-none"
+                        className="w-full appearance-none rounded-lg sm:rounded-xl border-2 border-indigo-300 bg-white p-2 sm:p-3 pr-8 sm:pr-10 text-sm sm:font-medium text-indigo-700 shadow-sm focus:border-indigo-500 focus:outline-none"
                         value={selectedScenario}
                         onChange={(e) => setSelectedScenario(e.target.value as ScenarioKey)}
                         aria-label="診断シナリオ"
@@ -611,27 +694,27 @@ const SuperPopNetworkTeacher: React.FC = () => {
                         <option value="dns-problem">特定のサイトだけ見れない</option>
                         <option value="slow">ネットが遅い・途中で切れる</option>
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <ArrowRight className="h-5 w-5 rotate-90 text-indigo-500" />
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3">
+                        <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 rotate-90 text-indigo-500" />
                       </div>
                     </div>
                   </div>
                   
                   <button 
-                    className={`group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-0.5 text-center font-extrabold text-white shadow-md transition-all duration-300 hover:shadow-lg ${isLoading ? 'opacity-80' : ''}`}
+                    className={`group relative w-full overflow-hidden rounded-lg sm:rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-0.5 text-center font-bold sm:font-extrabold text-white shadow-md transition-all duration-300 hover:shadow-lg ${isLoading ? 'opacity-80' : ''}`}
                     onClick={startDiagnosis}
                     disabled={isLoading}
                     aria-label="診断を開始"
                   >
-                    <span className="relative block rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-4 text-lg md:text-xl">
+                    <span className="relative block rounded-md sm:rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg md:text-xl">
                       {isLoading ? (
                         <span className="flex items-center justify-center">
-                          <Loader className="mr-3 h-6 w-6 animate-spin text-white" />
+                          <Loader className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6 animate-spin text-white" />
                           ネットワークを調査中...
                         </span>
                       ) : (
                         <span className="flex items-center justify-center">
-                          <Star className="mr-2 h-6 w-6" />
+                          <Star className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                           ワンタッチで診断スタート！
                         </span>
                       )}
@@ -640,7 +723,7 @@ const SuperPopNetworkTeacher: React.FC = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
                 <ExplanationBox
                   id="ping"
                   title="Pingってなに？"
@@ -674,50 +757,50 @@ const SuperPopNetworkTeacher: React.FC = () => {
           {/* 学習する画面 */}
           {activeTab === 'learn' && (
             <div className="animate-fadeIn">
-              <h2 className="mb-4 flex items-center text-2xl font-extrabold text-indigo-700">
-                <span className="mr-2 text-3xl">🎮</span>
+              <h2 className="mb-3 sm:mb-4 flex items-center text-xl sm:text-2xl font-extrabold text-indigo-700">
+                <span className="mr-2 text-2xl sm:text-3xl">🎮</span>
                 ネットワークをたのしく学ぼう！
               </h2>
               
-              <div className="space-y-6">
-                <div className="overflow-hidden rounded-2xl border-2 border-pink-300 bg-white shadow">
-                  <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-3 text-white">
-                    <h3 className="flex items-center text-lg font-bold">
-                      <span className="mr-2 text-xl">🏓</span>
+              <div className="space-y-4 sm:space-y-6">
+                <div className="overflow-hidden rounded-lg sm:rounded-2xl border-2 border-pink-300 bg-white shadow">
+                  <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-2 sm:p-3 text-white">
+                    <h3 className="flex items-center text-base sm:text-lg font-bold">
+                      <span className="mr-2 text-lg sm:text-xl">🏓</span>
                       Pingのヒミツ
                     </h3>
                   </div>
-                  <div className="p-4">
-                    <div className="flex items-center">
-                      <div className="mr-4 rounded-full bg-pink-100 p-3">
-                        <span className="text-3xl">🤖</span>
+                  <div className="p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="mb-2 sm:mb-0 sm:mr-4 rounded-full bg-pink-100 p-2 sm:p-3 inline-flex justify-center">
+                        <span className="text-2xl sm:text-3xl">🤖</span>
                       </div>
                       <div>
-                        <h4 className="mb-1 font-bold text-pink-700">Pingはネットのエコー！</h4>
-                        <p className="text-sm text-gray-700">
+                        <h4 className="mb-1 font-bold text-sm sm:text-base text-pink-700">Pingはネットのエコー！</h4>
+                        <p className="text-xs sm:text-sm text-gray-700">
                           山にむかって「やっほー！」と叫ぶと「やっほー！」と返ってくるよね。
                           Pingもそれと同じ！サイトに「いる？」と聞いて「いるよ！」と返事がくるか確認するよ！
                         </p>
                       </div>
                     </div>
                     
-                    <div className="mt-4 rounded-xl bg-gradient-to-r from-pink-50 to-rose-50 p-4">
-                      <div className="relative mb-6 overflow-hidden rounded-lg border-2 border-pink-200 bg-white p-3">
-                        <div className="absolute -right-10 -top-10 h-20 w-20 rounded-full bg-pink-100"></div>
+                    <div className="mt-3 sm:mt-4 rounded-xl bg-gradient-to-r from-pink-50 to-rose-50 p-3 sm:p-4">
+                      <div className="relative mb-4 sm:mb-6 overflow-hidden rounded-lg border-2 border-pink-200 bg-white p-2 sm:p-3">
+                        <div className="absolute -right-10 -top-10 h-16 sm:h-20 w-16 sm:w-20 rounded-full bg-pink-100"></div>
                         <div className="relative flex items-center">
                           <div className="font-code mr-2 rounded bg-pink-100 p-1 text-xs text-pink-700">
                             ping google.com
                           </div>
-                          <ArrowRight className="h-4 w-4 text-pink-500" />
-                          <div className="ml-2 text-pink-700">Googleさん、聞こえてる？</div>
+                          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-pink-500" />
+                          <div className="ml-2 text-xs sm:text-sm text-pink-700">Googleさん、聞こえてる？</div>
                         </div>
                       </div>
                       
-                      <div className="relative overflow-hidden rounded-lg border-2 border-rose-200 bg-white p-3">
-                        <div className="absolute -left-10 -bottom-10 h-20 w-20 rounded-full bg-rose-100"></div>
+                      <div className="relative overflow-hidden rounded-lg border-2 border-rose-200 bg-white p-2 sm:p-3">
+                        <div className="absolute -left-10 -bottom-10 h-16 sm:h-20 w-16 sm:w-20 rounded-full bg-rose-100"></div>
                         <div className="relative flex items-center">
-                          <div className="mr-2 text-rose-700">はい、元気ですよ！(0.42ms)</div>
-                          <ArrowRight className="h-4 w-4 rotate-180 text-rose-500" />
+                          <div className="mr-2 text-xs sm:text-sm text-rose-700">はい、元気ですよ！(0.42ms)</div>
+                          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 rotate-180 text-rose-500" />
                           <div className="ml-2 font-code rounded bg-rose-100 p-1 text-xs text-rose-700">
                             Reply from 142.251.42.238: time=42ms
                           </div>
@@ -725,123 +808,125 @@ const SuperPopNetworkTeacher: React.FC = () => {
                       </div>
                     </div>
                     
-                    <div className="mt-4 rounded-lg bg-pink-100 p-3">
-                      <p className="flex text-sm font-medium text-pink-700">
-                        <span className="mr-2 text-lg">💫</span>
+                    <div className="mt-3 sm:mt-4 rounded-lg bg-pink-100 p-2 sm:p-3">
+                      <p className="flex text-xs sm:text-sm font-medium text-pink-700">
+                        <span className="mr-2 text-base sm:text-lg">💫</span>
                         <span>Pingが失敗するときは、「サイトが応答してない」か「途中の道が通れない」状態だよ！</span>
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="overflow-hidden rounded-2xl border-2 border-emerald-300 bg-white shadow">
-                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-3 text-white">
-                    <h3 className="flex items-center text-lg font-bold">
-                      <span className="mr-2 text-xl">🗺️</span>
+                <div className="overflow-hidden rounded-lg sm:rounded-2xl border-2 border-emerald-300 bg-white shadow">
+                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-2 sm:p-3 text-white">
+                    <h3 className="flex items-center text-base sm:text-lg font-bold">
+                      <span className="mr-2 text-lg sm:text-xl">🗺️</span>
                       ルーティングのヒミツ
                     </h3>
                   </div>
-                  <div className="p-4">
-                    <div className="flex items-center">
-                      <div className="mr-4 rounded-full bg-emerald-100 p-3">
-                        <span className="text-3xl">🧭</span>
+                  <div className="p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="mb-2 sm:mb-0 sm:mr-4 rounded-full bg-emerald-100 p-2 sm:p-3 inline-flex justify-center">
+                        <span className="text-2xl sm:text-3xl">🧭</span>
                       </div>
                       <div>
-                        <h4 className="mb-1 font-bold text-emerald-700">ルーティングは経路選択！</h4>
-                        <p className="text-sm text-gray-700">
+                        <h4 className="mb-1 font-bold text-sm sm:text-base text-emerald-700">ルーティングは経路選択！</h4>
+                        <p className="text-xs sm:text-sm text-gray-700">
                           学校への行き方をいくつか知ってるみたいに、データも色んな道を選べるよ。
                           その中から一番良い道を選んで通信するのがルーティングだよ！
                         </p>
                       </div>
                     </div>
                     
-                    <div className="mt-4 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex w-1/4 flex-col items-center">
-                          <div className="text-3xl">💻</div>
+                    <div className="mt-3 sm:mt-4 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 p-3 sm:p-4">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between">
+                        <div className="flex w-full md:w-1/4 flex-col items-center mb-2 md:mb-0">
+                          <div className="text-2xl sm:text-3xl">💻</div>
                           <div className="mt-1 text-center text-xs font-bold">あなたのPC</div>
                         </div>
                         
-                        <div className="flex w-1/2 flex-col">
-                          <div className="mb-1 flex justify-center space-x-2">
-                            <ArrowRight className="text-emerald-500" />
-                            <ArrowRight className="text-emerald-500" />
-                            <ArrowRight className="text-emerald-500" />
+                        <div className="flex w-full md:w-1/2 flex-col mb-2 md:mb-0">
+                          <div className="mb-1 flex justify-center space-x-1 sm:space-x-2">
+                            <ArrowRight className="text-emerald-500" size={14} />
+                            <ArrowRight className="text-emerald-500" size={14} />
+                            <ArrowRight className="text-emerald-500" size={14} />
                           </div>
-                          <div className="rounded-lg border-2 border-dashed border-emerald-300 bg-white p-2 text-center text-sm font-medium text-emerald-700">
+                          <div className="rounded-lg border-2 border-dashed border-emerald-300 bg-white p-2 text-center text-xs md:text-sm font-medium text-emerald-700">
                             ゲートウェイを経由してインターネットに出る
                           </div>
                         </div>
                         
-                        <div className="flex w-1/4 flex-col items-center">
-                          <div className="text-3xl">🌐</div>
+                        <div className="flex w-full md:w-1/4 flex-col items-center">
+                          <div className="text-2xl sm:text-3xl">🌐</div>
                           <div className="mt-1 text-center text-xs font-bold">インターネット</div>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="mt-4 rounded-lg bg-emerald-100 p-3">
-                      <p className="flex text-sm font-medium text-emerald-700">
-                        <span className="mr-2 text-lg">🚀</span>
+                    <div className="mt-3 sm:mt-4 rounded-lg bg-emerald-100 p-2 sm:p-3">
+                      <p className="flex text-xs sm:text-sm font-medium text-emerald-700">
+                        <span className="mr-2 text-base sm:text-lg">🚀</span>
                         <span>ゲートウェイが設定されてないと、「外に出る道がわからない」状態になるよ！</span>
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="overflow-hidden rounded-2xl border-2 border-purple-300 bg-white shadow">
-                  <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-3 text-white">
-                    <h3 className="flex items-center text-lg font-bold">
-                      <span className="mr-2 text-xl">📖</span>
+                <div className="overflow-hidden rounded-lg sm:rounded-2xl border-2 border-purple-300 bg-white shadow">
+                  <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-2 sm:p-3 text-white">
+                    <h3 className="flex items-center text-base sm:text-lg font-bold">
+                      <span className="mr-2 text-lg sm:text-xl">📖</span>
                       DNSのヒミツ
                     </h3>
                   </div>
-                  <div className="p-4">
-                    <div className="flex items-center">
-                      <div className="mr-4 rounded-full bg-purple-100 p-3">
-                        <span className="text-3xl">📚</span>
+                  <div className="p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="mb-2 sm:mb-0 sm:mr-4 rounded-full bg-purple-100 p-2 sm:p-3 inline-flex justify-center">
+                        <span className="text-2xl sm:text-3xl">📚</span>
                       </div>
                       <div>
-                        <h4 className="mb-1 font-bold text-purple-700">DNSはネットの住所録！</h4>
-                        <p className="text-sm text-gray-700">
+                        <h4 className="mb-1 font-bold text-sm sm:text-base text-purple-700">DNSはネットの住所録！</h4>
+                        <p className="text-xs sm:text-sm text-gray-700">
                           人の名前を見たらすぐに電話番号がわかる電話帳みたいなもの。
                           「google.com」という名前から「172.217.175.110」という住所（IPアドレス）を教えてくれるよ！
                         </p>
                       </div>
                     </div>
                     
-                    <div className="mt-4 overflow-hidden rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 p-4">
+                    <div className="mt-3 sm:mt-4 overflow-hidden rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 p-3 sm:p-4">
                       <div className="mb-2 overflow-hidden rounded-lg bg-white">
-                        <div className="bg-purple-200 p-2 text-center text-sm font-bold text-purple-700">
+                        <div className="bg-purple-200 p-1 sm:p-2 text-center text-xs sm:text-sm font-bold text-purple-700">
                           DNSサーバー（インターネットの電話帳）
                         </div>
                         <div className="p-2">
-                          <table className="w-full">
-                            <tbody>
-                              <tr className="border-b border-purple-100">
-                                <td className="p-2 text-sm font-medium text-gray-700">google.com</td>
-                                <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
-                                <td className="p-2 font-mono text-sm text-gray-700">172.217.175.110</td>
-                              </tr>
-                              <tr className="border-b border-purple-100">
-                                <td className="p-2 text-sm font-medium text-gray-700">facebook.com</td>
-                                <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
-                                <td className="p-2 font-mono text-sm text-gray-700">31.13.72.36</td>
-                              </tr>
-                              <tr>
-                                <td className="p-2 text-sm font-medium text-gray-700">youtube.com</td>
-                                <td className="p-2 text-center text-purple-500"><ArrowRight size={16} /></td>
-                                <td className="p-2 font-mono text-sm text-gray-700">142.250.185.78</td>
-                              </tr>
-                            </tbody>
-                          </table>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <tbody>
+                                <tr className="border-b border-purple-100">
+                                  <td className="p-1 sm:p-2 text-xs sm:text-sm font-medium text-gray-700">google.com</td>
+                                  <td className="p-1 sm:p-2 text-center text-purple-500"><ArrowRight size={12} /></td>
+                                  <td className="p-1 sm:p-2 font-mono text-xs sm:text-sm text-gray-700">172.217.175.110</td>
+                                </tr>
+                                <tr className="border-b border-purple-100">
+                                  <td className="p-1 sm:p-2 text-xs sm:text-sm font-medium text-gray-700">facebook.com</td>
+                                  <td className="p-1 sm:p-2 text-center text-purple-500"><ArrowRight size={12} /></td>
+                                  <td className="p-1 sm:p-2 font-mono text-xs sm:text-sm text-gray-700">31.13.72.36</td>
+                                </tr>
+                                <tr>
+                                  <td className="p-1 sm:p-2 text-xs sm:text-sm font-medium text-gray-700">youtube.com</td>
+                                  <td className="p-1 sm:p-2 text-center text-purple-500"><ArrowRight size={12} /></td>
+                                  <td className="p-1 sm:p-2 font-mono text-xs sm:text-sm text-gray-700">142.250.185.78</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="mt-4 rounded-lg bg-purple-100 p-3">
-                      <p className="flex text-sm font-medium text-purple-700">
-                        <span className="mr-2 text-lg">✨</span>
+                    <div className="mt-3 sm:mt-4 rounded-lg bg-purple-100 p-2 sm:p-3">
+                      <p className="flex text-xs sm:text-sm font-medium text-purple-700">
+                        <span className="mr-2 text-base sm:text-lg">✨</span>
                         <span>DNSが使えないと、サイト名でアクセスできなくなるよ！IPアドレスを直接入力すれば大丈夫！</span>
                       </p>
                     </div>
@@ -855,36 +940,36 @@ const SuperPopNetworkTeacher: React.FC = () => {
           {activeTab === 'results' && diagnosisResult && (
             <div className="animate-fadeIn">
               {/* 診断サマリー */}
-              <div className={`mb-6 overflow-hidden rounded-2xl border-2 ${scenarios[diagnosisResult].borderColor}`}>
-                <div className={`bg-gradient-to-r ${scenarios[diagnosisResult].primaryColor} p-5 text-white`}>
+              <div className={`mb-4 sm:mb-6 overflow-hidden rounded-lg sm:rounded-2xl border-2 ${scenarios[diagnosisResult].borderColor}`}>
+                <div className={`bg-gradient-to-r ${scenarios[diagnosisResult].primaryColor} p-3 sm:p-5 text-white`}>
                   <div className="flex items-center">
-                    <div className="mr-4 text-5xl">{scenarios[diagnosisResult].character}</div>
+                    <div className="mr-3 sm:mr-4 text-3xl sm:text-5xl">{scenarios[diagnosisResult].character}</div>
                     <div>
-                      <h2 className="mb-1 text-2xl font-extrabold">
+                      <h2 className="mb-0 sm:mb-1 text-lg sm:text-2xl font-bold sm:font-extrabold">
                         {scenarios[diagnosisResult].title}
                       </h2>
-                      <p className="text-lg font-bold">
+                      <p className="text-sm sm:text-lg font-medium sm:font-bold">
                         {scenarios[diagnosisResult].subtitle}
                       </p>
                     </div>
-                    <div className="ml-auto text-4xl">{scenarios[diagnosisResult].emoji}</div>
+                    <div className="ml-auto text-3xl sm:text-4xl">{scenarios[diagnosisResult].emoji}</div>
                   </div>
                 </div>
-                <div className={`bg-gradient-to-br ${scenarios[diagnosisResult].bgGradient} p-4`}>
-                  <p className={`text-center text-lg font-bold ${scenarios[diagnosisResult].textColor}`}>
+                <div className={`bg-gradient-to-br ${scenarios[diagnosisResult].bgGradient} p-3 sm:p-4`}>
+                  <p className={`text-center text-sm sm:text-lg font-medium sm:font-bold ${scenarios[diagnosisResult].textColor}`}>
                     {scenarios[diagnosisResult].description}
                   </p>
                 </div>
               </div>
               
               {/* 診断詳細 */}
-              <div className="mb-6">
-                <h3 className="mb-3 flex items-center text-xl font-bold text-indigo-700">
-                  <Heart className="mr-2 h-5 w-5 text-pink-500" />
+              <div className="mb-4 sm:mb-6">
+                <h3 className="mb-2 sm:mb-3 flex items-center text-base sm:text-xl font-bold text-indigo-700">
+                  <Heart className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-pink-500" />
                   診断結果の詳細
                 </h3>
                 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                   <StatusCard
                     icon={scenarios[diagnosisResult].details.ping.icon}
                     title={scenarios[diagnosisResult].details.ping.title}
@@ -916,54 +1001,54 @@ const SuperPopNetworkTeacher: React.FC = () => {
               </div>
               
               {/* 対策アドバイス */}
-              <div className="mb-6 overflow-hidden rounded-2xl border-2 border-indigo-300 bg-white shadow">
-                <div className="bg-gradient-to-r from-indigo-500 to-blue-500 p-4 text-white">
-                  <h3 className="flex items-center text-xl font-bold">
-                    <Sparkles className="mr-2 h-6 w-6" />
+              <div className="mb-4 sm:mb-6 overflow-hidden rounded-lg sm:rounded-2xl border-2 border-indigo-300 bg-white shadow">
+                <div className="bg-gradient-to-r from-indigo-500 to-blue-500 p-3 sm:p-4 text-white">
+                  <h3 className="flex items-center text-base sm:text-xl font-bold">
+                    <Sparkles className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                     問題解決のヒミツ！
                   </h3>
                 </div>
-                <div className="p-5">
+                <div className="p-4 sm:p-5">
                   {diagnosisResult === 'normal' ? (
-                    <div className="rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 p-4">
-                      <div className="flex">
-                        <div className="mr-3 text-4xl">🎊</div>
-                        <p className="text-lg font-medium text-emerald-700">
+                    <div className="rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 p-3 sm:p-4">
+                      <div className="flex items-start sm:items-center">
+                        <div className="mr-2 sm:mr-3 text-3xl sm:text-4xl">🎊</div>
+                        <p className="text-sm sm:text-lg font-medium text-emerald-700">
                           {scenarios[diagnosisResult].solution.steps[0]}
                         </p>
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <div className="mb-4 rounded-xl bg-gradient-to-r from-indigo-50 to-blue-50 p-4">
-                        <p className="mb-2 flex items-center text-lg font-extrabold text-indigo-700">
-                          <span className="mr-2 text-2xl">✨</span>
+                      <div className="mb-4 rounded-xl bg-gradient-to-r from-indigo-50 to-blue-50 p-3 sm:p-4">
+                        <p className="mb-2 flex items-center text-base sm:text-lg font-bold sm:font-extrabold text-indigo-700">
+                          <span className="mr-2 text-xl sm:text-2xl">✨</span>
                           {scenarios[diagnosisResult].solution.title}
                         </p>
                         
                         {scenarios[diagnosisResult].solution.command && (
-                          <div className="mb-4 rounded-lg bg-gray-800 p-3">
+                          <div className="mb-3 sm:mb-4 rounded-lg bg-gray-800 p-2 sm:p-3">
                             <div className="mb-1 text-xs font-medium text-gray-400">お医者さんコマンド（難しい言葉）:</div>
-                            <div className="rounded bg-black p-2 font-mono text-sm text-green-400">
+                            <div className="rounded bg-black p-1 sm:p-2 font-mono text-xs sm:text-sm text-green-400 overflow-x-auto">
                               {scenarios[diagnosisResult].solution.command}
                             </div>
                           </div>
                         )}
                         
-                        <div className="rounded-lg bg-white p-3 shadow-inner">
+                        <div className="rounded-lg bg-white p-2 sm:p-3 shadow-inner">
                           <div className="mb-1 flex items-center text-blue-700">
-                            <span className="mr-1 text-lg">🌟</span>
-                            <span className="font-bold">やさしく言うと：</span>
+                            <span className="mr-1 text-base sm:text-lg">🌟</span>
+                            <span className="text-sm sm:text-base font-bold">やさしく言うと：</span>
                           </div>
-                          <p className="mb-3 text-sm text-blue-600">
+                          <p className="mb-2 sm:mb-3 text-xs sm:text-sm text-blue-600">
                             {scenarios[diagnosisResult].solution.explanation}
                           </p>
                           
-                          <ul className="space-y-2">
+                          <ul className="space-y-1 sm:space-y-2">
                             {scenarios[diagnosisResult].solution.steps.map((step, index) => (
-                              <li key={index} className="flex items-start rounded-lg bg-blue-50 p-2">
-                                <span className="mr-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white">{index + 1}</span>
-                                <span className="text-sm font-medium text-blue-700">{step}</span>
+                              <li key={index} className="flex items-start rounded-lg bg-blue-50 p-1 sm:p-2">
+                                <span className="mr-1 sm:mr-2 flex h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white">{index + 1}</span>
+                                <span className="text-xs sm:text-sm font-medium text-blue-700">{step}</span>
                               </li>
                             ))}
                           </ul>
@@ -974,27 +1059,27 @@ const SuperPopNetworkTeacher: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0">
+              <div className="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-3">
                 <button 
-                  className="group relative overflow-hidden rounded-xl border-2 border-indigo-200 bg-white p-0.5 text-center font-bold text-indigo-500 transition-all duration-300 hover:border-indigo-300 hover:shadow-md md:flex-1"
+                  className="group relative overflow-hidden rounded-lg sm:rounded-xl border-2 border-indigo-200 bg-white p-0.5 text-center font-bold text-indigo-500 transition-all duration-300 hover:border-indigo-300 hover:shadow-md sm:flex-1"
                   onClick={resetDiagnosis}
                   aria-label="もう一度診断する"
                 >
-                  <span className="block rounded-lg px-6 py-3 text-lg">
+                  <span className="block rounded-lg px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg">
                     <span className="flex items-center justify-center">
-                      <Zap className="mr-2 h-5 w-5" />
+                      <Zap className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       もう一度診断する
                     </span>
                   </span>
                 </button>
                 <button 
-                  className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 p-0.5 text-center font-extrabold text-white shadow-md transition-all duration-300 hover:shadow-lg md:flex-1"
+                  className="group relative overflow-hidden rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 p-0.5 text-center font-bold sm:font-extrabold text-white shadow-md transition-all duration-300 hover:shadow-lg sm:flex-1"
                   onClick={() => setActiveTab('learn')}
                   aria-label="もっと詳しく学ぶ"
                 >
-                  <span className="relative block rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 px-6 py-3 text-lg">
+                  <span className="relative block rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg">
                     <span className="flex items-center justify-center">
-                      <Heart className="mr-2 h-5 w-5" />
+                      <Heart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       もっと詳しく学ぶ！
                     </span>
                   </span>
@@ -1006,28 +1091,28 @@ const SuperPopNetworkTeacher: React.FC = () => {
           {/* 詳細診断画面 - Cisco 892ルーター診断 */}
           {activeTab === 'advanced' && (
             <div className="animate-fadeIn">
-              <div className="mb-4 overflow-hidden rounded-2xl border-2 border-slate-300 bg-white">
-                <div className="bg-gradient-to-r from-slate-600 to-slate-800 p-4 text-white">
-                  <h2 className="flex items-center text-xl font-bold">
-                    <Server className="mr-2 h-6 w-6" />
+              <div className="mb-4 overflow-hidden rounded-lg sm:rounded-2xl border-2 border-slate-300 bg-white">
+                <div className="bg-gradient-to-r from-slate-600 to-slate-800 p-3 sm:p-4 text-white">
+                  <h2 className="flex items-center text-base sm:text-xl font-bold">
+                    <Server className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                     Cisco 892ルーター詳細診断
                   </h2>
                 </div>
-                <div className="p-4">
-                  <div className="mb-4 rounded-xl bg-slate-50 p-3 shadow-sm">
-                    <p className="mb-2 text-base font-medium text-slate-700">
-                      <span className="text-lg">🖥️</span> ネットワーク機器の詳細な診断を実行できます
+                <div className="p-3 sm:p-4">
+                  <div className="mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-slate-50 p-2 sm:p-3 shadow-sm">
+                    <p className="mb-2 text-sm sm:text-base font-medium text-slate-700">
+                      <span className="text-base sm:text-lg">🖥️</span> ネットワーク機器の詳細な診断を実行できます
                     </p>
                     <div className="flex rounded-lg bg-slate-100 p-2">
-                      <div className="text-xl">⚠️</div>
-                      <p className="ml-2 text-sm text-slate-700">
+                      <div className="text-base sm:text-xl">⚠️</div>
+                      <p className="ml-2 text-xs sm:text-sm text-slate-700">
                         この機能はCisco 892ルーターを使用したネットワーク環境向けに最適化されています
                       </p>
                     </div>
                   </div>
                   
                   <button 
-                    className="w-full rounded-lg bg-slate-700 py-3 text-center font-bold text-white shadow hover:bg-slate-800"
+                    className="w-full rounded-lg bg-slate-700 py-2 sm:py-3 text-center text-sm sm:text-base font-bold text-white shadow hover:bg-slate-800"
                     onClick={() => setActiveTab('cisco-diagnostics')}
                     aria-label="詳細診断ツールを起動"
                   >
